@@ -25,7 +25,7 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative flex min-h-[90vh] flex-col items-center gap-6 text-balance bg-background p-6 text-center text-primary">
+    <main className="relative flex min-h-[90vh] flex-col items-center gap-6 text-balance bg-background p-6 text-center text-primary">
       <BgGradient />
 
       <div className="z-10 mt-10 flex flex-col items-center gap-8 px-2 md:mt-32 md:px-0">
@@ -34,7 +34,7 @@ export default function Hero() {
           <AvatarsGroup>
             {AVATARS.map((avatar) => (
               <Avatar className="size-5" key={avatar.alt}>
-                <AvatarImage src={avatar.src} />
+                <AvatarImage alt={avatar.alt} src={avatar.src} />
                 <AvatarFallback>{avatar.alt}</AvatarFallback>
               </Avatar>
             ))}
@@ -69,6 +69,6 @@ export default function Hero() {
           </Button>
         </div>
       </div>
-    </section>
+    </main>
   );
 }

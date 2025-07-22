@@ -86,7 +86,11 @@ export default function MainNavbar() {
         <div className="block lg:hidden">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link className="flex items-center gap-2" href="/">
+            <Link
+              aria-label="Home"
+              className="flex items-center gap-2"
+              href="/"
+            >
               <Logo logo />
             </Link>
 
