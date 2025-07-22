@@ -32,6 +32,9 @@
       "complexity": {
         "noVoid": "off"
       },
+      "performance": {
+        "noNamespaceImport": "off"
+      },
       "recommended": true
     }
   },
