@@ -1,19 +1,19 @@
-import Link from 'next/link';
-import Logo from '@/components/common/logo';
-import { GLOBAL_CONFIG } from '@/lib/global-config';
+import Link from "next/link"
+import Logo from "@/components/common/logo"
+import { GLOBAL_CONFIG } from "@/lib/global-config"
 
 const footer = {
   tagline:
     "Simplifiez la gestion de votre école, concentrez-vous sur l'éducation.",
   menuItems: [
     {
-      title: 'Produit',
+      title: "Produit",
       links: [
-        { text: 'Présentation', url: '#' },
-        { text: 'Tarification', url: '/pricing' },
-        { text: 'Fonctionnalités', url: '#' },
+        { text: "Présentation", url: "#" },
+        { text: "Tarification", url: "/pricing" },
+        { text: "Fonctionnalités", url: "#" },
         // { text: "Intégrations", url: "#" },
-        { text: 'Démos', url: 'https://www.linkedin.com/company/edva-sms' },
+        { text: "Démos", url: "https://www.linkedin.com/company/edva-sms" },
       ],
     },
   ],
@@ -21,10 +21,10 @@ const footer = {
     GLOBAL_CONFIG.logo.fullTitle
   }. Tous droits réservés.`,
   bottomLinks: [
-    { text: "Conditions d'utilisation", url: '/terms-and-conditions' },
-    { text: 'Politique de confidentialité', url: '/privacy-policy' },
+    { text: "Conditions d'utilisation", url: "/terms-and-conditions" },
+    { text: "Politique de confidentialité", url: "/privacy-policy" },
   ],
-};
+}
 
 export default function MainFooter() {
   return (
@@ -70,5 +70,5 @@ export default function MainFooter() {
         </ul>
       </div>
     </footer>
-  );
+  )
 }
