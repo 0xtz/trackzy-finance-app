@@ -1,11 +1,29 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { EllipsisVertical, DollarSign, Calendar, FileText } from "lucide-react";
+import {
+  Calendar,
+  DollarSign,
+  EllipsisVertical,
+  Pencil,
+  Trash,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import DataTable from "@/components/common/data-table";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { formatCurrency, formatDate } from "@/lib/utils";
 import { api, type RouterOutputs } from "@/trpc/react";
+import UpsertBudgetDialog from "./add-budget-dialog";
 
 export default function BudgetDataTable() {
   const [data] = api.budget.getAll.useSuspenseQuery({
@@ -17,50 +35,147 @@ export default function BudgetDataTable() {
     RouterOutputs["budget"]["getAll"]["items"][number]
   >[] = [
     {
-      header: "Name",
+      header: "Budget Name",
       accessorKey: "name",
       cell: ({ row }) => {
-        return <div className="font-bold">{row.original.name}</div>;
+        return (
+          <div className="flex items-center space-x-2">
+            <span className="font-semibold text-foreground">
+              {row.original.name}
+            </span>
+          </div>
+        );
       },
     },
     {
-      header: "Amount",
+      header: () => {
+        return <div className="text-center">Amount (MAD)</div>;
+      },
       accessorKey: "amount",
       cell: ({ row }) => {
-        return <div>{row.original.amount}</div>;
+        const amount = Number(row.original.amount);
+        return (
+          <div className="flex items-center justify-center">
+            <Badge className="font-mono" variant="outline">
+              {formatCurrency(amount)}
+            </Badge>
+          </div>
+        );
       },
     },
     {
       header: "Description",
       accessorKey: "description",
       cell: ({ row }) => {
-        return <div>{row.original.description}</div>;
-      },
-    },
-    {
-      header: "Created At",
-      accessorKey: "created_at",
-      cell: ({ row }) => {
-        return <div>{row.original.created_at.toLocaleDateString()}</div>;
-      },
-    },
-    {
-      header: "Actions",
-      cell: ({ row }) => {
+        const description = row.original.description;
         return (
-          <div className="flex items-center">
-            <Button
-              aria-label={`Actions for ${row.original.id}`}
-              size="icon"
-              variant="outline"
-            >
-              <EllipsisVertical />
-            </Button>
+          // TODO: add a tooltip to the description
+          <div className="max-w-[300px]">
+            {description ? (
+              <p className="truncate text-muted-foreground text-sm">
+                {description}
+              </p>
+            ) : (
+              <X className="size-4 text-muted-foreground" />
+            )}
           </div>
         );
       },
     },
+    {
+      header: "Created",
+      accessorKey: "created_at",
+      cell: ({ row }) => {
+        return (
+          <div className="group flex cursor-default items-center space-x-2 text-muted-foreground text-sm transition-all duration-300 hover:text-primary">
+            <Calendar className="size-4 group-hover:scale-105" />
+            <span className="">{formatDate(row.original.created_at)}</span>
+          </div>
+        );
+      },
+    },
+    {
+      header: () => <div className="text-end">Actions</div>,
+      accessorKey: "actions",
+      cell: ({ row }) => <BudgetActions budget={row.original} />,
+    },
   ];
 
+  // TODO : empty state
+
   return <DataTable columns={columns} data={data.items} />;
+}
+
+function BudgetActions({
+  budget,
+}: {
+  budget: RouterOutputs["budget"]["getAll"]["items"][number];
+}) {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  const utils = api.useUtils();
+  const { mutateAsync: deleteBudget, isPending: isDeleting } =
+    api.budget.delete.useMutation({
+      onSuccess: async ({ success }) => {
+        if (!success) {
+          return;
+        }
+
+        await utils.budget.getAll.invalidate();
+      },
+    });
+
+  return (
+    <>
+      <div className="flex items-center justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              aria-label={`Actions for ${budget.id}`}
+              size="icon"
+              variant="outline"
+            >
+              <EllipsisVertical className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+              <Pencil className="size-4" />
+              Edit Budget
+            </DropdownMenuItem>
+
+            <DropdownMenuItem>
+              <DollarSign className="size-4" />
+              Duplicate Budget
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem
+              className="hover:!text-destructive text-destructive"
+              disabled={isDeleting}
+              onClick={() => {
+                toast.promise(deleteBudget({ id: budget.id }), {
+                  loading: "Deleting budget...",
+                  success: "Budget deleted successfully!",
+                  error: "Failed to delete budget",
+                });
+              }}
+            >
+              <Trash className="size-4 text-destructive" />
+              Delete Budget
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* --- */}
+      <UpsertBudgetDialog
+        budget={budget}
+        onOpenChange={setIsEditDialogOpen}
+        open={isEditDialogOpen}
+      />
+    </>
+  );
 }

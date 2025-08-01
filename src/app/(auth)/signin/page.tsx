@@ -1,6 +1,6 @@
-import { DoorOpen } from "lucide-react";
-import Link from "next/link";
-import { SigninForm } from "../_components/signin-form";
+import { DoorOpen } from "lucide-react"
+import Link from "next/link"
+import { SigninForm } from "../_components/signin-form"
 
 export default function SigninPage() {
   return (
@@ -24,5 +24,5 @@ export default function SigninPage() {
         </Link>
       </div>
     </>
-  );
+  )
 }

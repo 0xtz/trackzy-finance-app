@@ -1,6 +1,6 @@
-import { DoorClosed } from "lucide-react";
-import Link from "next/link";
-import { SignupForm } from "../_components/signup-form";
+import { DoorClosed } from "lucide-react"
+import Link from "next/link"
+import { SignupForm } from "../_components/signup-form"
 
 export default function SignupPage() {
   return (
@@ -24,5 +24,5 @@ export default function SignupPage() {
         </Link>
       </div>
     </>
-  );
+  )
 }
