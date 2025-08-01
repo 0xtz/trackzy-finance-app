@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm"
+import { sql } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
@@ -7,7 +7,7 @@ import {
   text,
   timestamp,
   unique,
-} from "drizzle-orm/pg-core"
+} from "drizzle-orm/pg-core";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -15,7 +15,7 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `trackzy_${name}`)
+export const createTable = pgTableCreator((name) => `trackzy_${name}`);
 
 // --- auth ---
 export const user = createTable(
@@ -32,7 +32,7 @@ export const user = createTable(
     updated_at: timestamp({ mode: "date" }).notNull(),
   },
   (table) => [unique("user_email_key").on(table.email)]
-)
+);
 
 export const account = createTable(
   "account",
@@ -60,7 +60,7 @@ export const account = createTable(
       name: "account_user_id_fkey",
     }),
   ]
-)
+);
 
 export const session = createTable(
   "session",
@@ -84,7 +84,7 @@ export const session = createTable(
     }),
     unique("session_token_key").on(table.token),
   ]
-)
+);
 
 export const verification = createTable("verification", {
   id: text("id").primaryKey(),
@@ -95,7 +95,7 @@ export const verification = createTable("verification", {
   expires_at: timestamp("expires_at").notNull(),
   created_at: timestamp("created_at").$defaultFn(() => new Date()),
   updated_at: timestamp("updated_at").$defaultFn(() => new Date()),
-})
+});
 
 // --- app ---
 
@@ -123,7 +123,7 @@ export const category = createTable(
       name: "category_user_id_fkey",
     }),
   ]
-)
+);
 
 export const budget = createTable(
   "budget",
@@ -147,7 +147,7 @@ export const budget = createTable(
       name: "budget_user_id_fkey",
     }),
   ]
-)
+);
 
 export const income = createTable(
   "income",
@@ -179,7 +179,7 @@ export const income = createTable(
       name: "income_category_id_fkey",
     }),
   ]
-)
+);
 
 export const expense = createTable(
   "expense",
@@ -217,4 +217,4 @@ export const expense = createTable(
       name: "expense_budget_id_fkey",
     }),
   ]
-)
+);

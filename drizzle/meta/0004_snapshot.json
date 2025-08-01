@@ -94,12 +94,8 @@
           "name": "account_user_id_fkey",
           "tableFrom": "trackzy_account",
           "tableTo": "trackzy_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -164,12 +160,8 @@
           "name": "budget_user_id_fkey",
           "tableFrom": "trackzy_budget",
           "tableTo": "trackzy_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -240,12 +232,8 @@
           "name": "category_user_id_fkey",
           "tableFrom": "trackzy_category",
           "tableTo": "trackzy_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -334,12 +322,8 @@
           "name": "expense_user_id_fkey",
           "tableFrom": "trackzy_expense",
           "tableTo": "trackzy_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -347,12 +331,8 @@
           "name": "expense_category_id_fkey",
           "tableFrom": "trackzy_expense",
           "tableTo": "trackzy_category",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -360,12 +340,8 @@
           "name": "expense_budget_id_fkey",
           "tableFrom": "trackzy_expense",
           "tableTo": "trackzy_budget",
-          "columnsFrom": [
-            "budget_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["budget_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -448,12 +424,8 @@
           "name": "income_user_id_fkey",
           "tableFrom": "trackzy_income",
           "tableTo": "trackzy_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -461,12 +433,8 @@
           "name": "income_category_id_fkey",
           "tableFrom": "trackzy_income",
           "tableTo": "trackzy_category",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -536,12 +504,8 @@
           "name": "session_user_id_fkey",
           "tableFrom": "trackzy_session",
           "tableTo": "trackzy_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -551,9 +515,7 @@
         "session_token_key": {
           "name": "session_token_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -615,9 +577,7 @@
         "user_email_key": {
           "name": "user_email_key",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},

@@ -1,6 +1,6 @@
-import Link from "next/link"
-import Logo from "@/components/common/logo"
-import { GLOBAL_CONFIG } from "@/lib/global-config"
+import Link from "next/link";
+import Logo from "@/components/common/logo";
+import { GLOBAL_CONFIG } from "@/lib/global-config";
 
 const footer = {
   tagline:
@@ -24,7 +24,7 @@ const footer = {
     { text: "Conditions d'utilisation", url: "/terms-and-conditions" },
     { text: "Politique de confidentialité", url: "/privacy-policy" },
   ],
-}
+};
 
 export default function MainFooter() {
   return (
@@ -70,5 +70,5 @@ export default function MainFooter() {
         </ul>
       </div>
     </footer>
-  )
+  );
 }

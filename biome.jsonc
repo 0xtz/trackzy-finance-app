@@ -40,7 +40,7 @@
   },
   "javascript": {
     "formatter": {
-      "semicolons": "asNeeded",
+      "semicolons": "always",
       "quoteStyle": "double"
     }
   },

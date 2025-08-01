@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,20 +13,20 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { authClient } from "@/lib/auth/client"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth/client";
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
-})
+});
 
-type FormSchema = z.infer<typeof formSchema>
+type FormSchema = z.infer<typeof formSchema>;
 
 // signin -> sign in to your account
 export function SigninForm() {
-  const [generalError, setGeneralError] = useState<string>("")
+  const [generalError, setGeneralError] = useState<string>("");
 
   // 1. Define your form.
   const form = useForm<FormSchema>({
@@ -35,12 +35,12 @@ export function SigninForm() {
       email: "",
       password: "",
     },
-  })
+  });
 
   // 2. Define a submit handler.
   function onSubmit(values: FormSchema) {
-    console.log(values)
-    setGeneralError("") // Clear any previous general errors
+    console.log(values);
+    setGeneralError(""); // Clear any previous general errors
 
     toast.promise(
       async () => {
@@ -48,30 +48,30 @@ export function SigninForm() {
           email: values.email,
           password: values.password,
           callbackURL: "/app",
-        })
+        });
 
-        console.log("🚀 ~ onSubmit ~ error:", error)
+        console.log("🚀 ~ onSubmit ~ error:", error);
 
         if (error) {
           if (error.code === "INVALID_EMAIL_OR_PASSWORD") {
             // Set a general error instead of field-specific errors
             setGeneralError(
               "Invalid email or password. Please check your credentials and try again."
-            )
-            throw new Error("Invalid credentials")
+            );
+            throw new Error("Invalid credentials");
           }
 
-          throw error
+          throw error;
         }
 
-        return data
+        return data;
       },
       {
         loading: "Signing in...",
         success: "Signed in successfully",
         error: "Failed to sign in",
       }
-    )
+    );
   }
 
   return (
@@ -126,5 +126,5 @@ export function SigninForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

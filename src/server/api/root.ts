@@ -2,9 +2,9 @@ import {
   categoryRouter,
   expenseRouter,
   incomeRouter,
-} from "@/server/api/routers/post"
-import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc"
-import { budgetRouter } from "./routers/budget"
+} from "@/server/api/routers/post";
+import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
+import { budgetRouter } from "./routers/budget";
 
 /**
  * This is the primary router for your server.
@@ -16,10 +16,10 @@ export const appRouter = createTRPCRouter({
   expense: expenseRouter,
   income: incomeRouter,
   category: categoryRouter,
-})
+});
 
 // export type definition of API
-export type AppRouter = typeof appRouter
+export type AppRouter = typeof appRouter;
 
 /**
  * Create a server-side caller for the tRPC API.
@@ -28,4 +28,4 @@ export type AppRouter = typeof appRouter
  * const res = await trpc.post.all();
  *       ^? Post[]
  */
-export const createCaller = createCallerFactory(appRouter)
+export const createCaller = createCallerFactory(appRouter);

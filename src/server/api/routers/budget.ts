@@ -1,8 +1,8 @@
-import { and, desc, eq, sql } from "drizzle-orm"
-import { z } from "zod"
-import { paginationInputSchema } from "@/lib/utils"
-import { createTRPCRouter, privateProcedure } from "@/server/api/trpc"
-import { budget } from "@/server/db/schema"
+import { and, desc, eq, sql } from "drizzle-orm";
+import { z } from "zod";
+import { paginationInputSchema } from "@/lib/utils";
+import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
+import { budget } from "@/server/db/schema";
 
 // Shared schemas
 const createBudgetSchema = z.object({
@@ -10,22 +10,22 @@ const createBudgetSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
   amount: z.string().min(1, "Amount is required"), // numeric string for Drizzle
-})
+});
 
 // Budget Router
 export const budgetRouter = createTRPCRouter({
   getAll: privateProcedure
     .input(paginationInputSchema.extend({}))
     .query(async ({ ctx, input }) => {
-      const { page, pageSize } = input
-      const offset = (page - 1) * pageSize
+      const { page, pageSize } = input;
+      const offset = (page - 1) * pageSize;
 
       // Get total count
       const countResult = await ctx.db
         .select({ count: sql<number>`count(*)` })
         .from(budget)
-        .where(eq(budget.user_id, ctx.user.id))
-      const count = countResult[0]?.count ?? 0
+        .where(eq(budget.user_id, ctx.user.id));
+      const count = countResult[0]?.count ?? 0;
 
       // Get paginated results
       const items = await ctx.db
@@ -34,14 +34,14 @@ export const budgetRouter = createTRPCRouter({
         .where(eq(budget.user_id, ctx.user.id))
         .orderBy(desc(budget.created_at))
         .limit(pageSize)
-        .offset(offset)
+        .offset(offset);
 
       return {
         items,
         totalPages: Math.ceil(Number(count) / pageSize),
         currentPage: page,
         totalItems: Number(count),
-      }
+      };
     }),
 
   upsert: privateProcedure
@@ -53,12 +53,12 @@ export const budgetRouter = createTRPCRouter({
           .update(budget)
           .set(input)
           .where(and(eq(budget.id, input.id), eq(budget.user_id, ctx.user.id)))
-          .returning()
+          .returning();
 
         return {
           success: true,
           budget: existingBudget,
-        }
+        };
       }
 
       // Create new budget
@@ -70,12 +70,12 @@ export const budgetRouter = createTRPCRouter({
           created_at: new Date(),
           updated_at: new Date(),
         })
-        .returning()
+        .returning();
 
       return {
         success: true,
         budget: newBudget,
-      }
+      };
     }),
 
   delete: privateProcedure
@@ -83,10 +83,10 @@ export const budgetRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db
         .delete(budget)
-        .where(and(eq(budget.id, input.id), eq(budget.user_id, ctx.user.id)))
+        .where(and(eq(budget.id, input.id), eq(budget.user_id, ctx.user.id)));
 
       return {
         success: result.length > 0,
-      }
+      };
     }),
-})
+});

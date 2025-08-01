@@ -1,9 +1,9 @@
-import { betterAuth } from "better-auth"
-import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { nextCookies } from "better-auth/next-js"
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { nextCookies } from "better-auth/next-js";
 // import { Pool } from 'pg';
 // import { env } from '@/env';
-import { db } from "@/server/db"
+import { db } from "@/server/db";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -71,4 +71,4 @@ export const auth = betterAuth({
   ],
 
   // ...
-})
+});
