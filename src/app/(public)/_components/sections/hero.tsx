@@ -1,12 +1,13 @@
-import { ArrowRight } from "lucide-react";
-import { BgGradient } from "@/components/common/icons";
+import { ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { BgGradient } from "@/components/common/icons"
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   AvatarsGroup,
-} from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 
 export default function Hero() {
   const AVATARS = [
@@ -22,15 +23,15 @@ export default function Hero() {
       src: "https://github.com/shadcn.png",
       alt: "Avatar 3",
     },
-  ];
+  ]
 
   return (
-    <main className="relative flex min-h-[90vh] flex-col items-center gap-6 text-balance bg-background p-6 text-center text-primary">
+    <main className="container relative flex min-h-[90vh] flex-col items-center gap-6 text-balance bg-background p-6 text-center text-primary">
       <BgGradient />
 
       <div className="z-10 mt-10 flex flex-col items-center gap-8 px-2 md:mt-32 md:px-0">
         {/* avatars */}
-        <div className="inline-flex items-center gap-4 rounded-full px-6 py-3 outline outline-secondary">
+        <div className="inline-flex items-center gap-4 px-6 py-3 outline outline-secondary">
           <AvatarsGroup>
             {AVATARS.map((avatar) => (
               <Avatar className="size-5" key={avatar.alt}>
@@ -40,7 +41,9 @@ export default function Hero() {
             ))}
           </AvatarsGroup>
 
-          <p className="font-medium text-xs">Trusted by ~6,900+ users</p>
+          <p className="font-medium text-secondary text-xs">
+            Trusted by ~6,900+ users
+          </p>
         </div>
 
         {/* title */}
@@ -63,12 +66,14 @@ export default function Hero() {
         <div className="flex flex-wrap items-center justify-center gap-4">
           <Button size="lg">See How It Works</Button>
 
-          <Button size="lg" variant="secondary">
-            Get Started Free
-            <ArrowRight className="size-4" />
+          <Button asChild size="lg" variant="secondary">
+            <Link href="/signup">
+              Get Started Free
+              <ArrowRight className="size-4" />
+            </Link>
           </Button>
         </div>
       </div>
     </main>
-  );
+  )
 }

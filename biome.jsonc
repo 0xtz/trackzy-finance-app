@@ -38,5 +38,11 @@
       "recommended": true
     }
   },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "quoteStyle": "double"
+    }
+  },
   "extends": ["ultracite"]
 }

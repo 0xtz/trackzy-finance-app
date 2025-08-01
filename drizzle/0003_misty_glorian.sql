@@ -1,0 +1,1 @@
+ALTER TABLE "trackzy_user" DROP COLUMN "address";
