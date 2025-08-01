@@ -1,7 +1,6 @@
-import { DoorOpen } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { DoorOpen } from "lucide-react";
+import Link from "next/link";
+import { SigninForm } from "../_components/signin-form";
 
 export default function SigninPage() {
   return (
@@ -12,18 +11,7 @@ export default function SigninPage() {
           Sign in
         </h1>
 
-        <Input className="text-sm" placeholder="Email" required type="email" />
-
-        <Input
-          className="text-sm"
-          placeholder="Password"
-          required
-          type="password"
-        />
-
-        <Button className="w-full" type="submit">
-          Sign in
-        </Button>
+        <SigninForm />
       </div>
 
       <div className="flex justify-center gap-1 text-muted-foreground text-sm">
@@ -36,5 +24,5 @@ export default function SigninPage() {
         </Link>
       </div>
     </>
-  )
+  );
 }
