@@ -1,4 +1,4 @@
-import Hero from "./_components/sections/hero"
+import Hero from "./_components/sections/hero";
 
 export default function Home() {
   return (
@@ -7,5 +7,5 @@ export default function Home() {
 
       <div className="h-screen bg-background" />
     </>
-  )
+  );
 }

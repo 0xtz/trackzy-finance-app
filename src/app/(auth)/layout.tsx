@@ -1,4 +1,4 @@
-import Logo from "@/components/common/logo"
+import Logo from "@/components/common/logo";
 
 export default function AuthLayout({
   children,
@@ -14,5 +14,5 @@ export default function AuthLayout({
         </div>
       </div>
     </section>
-  )
+  );
 }

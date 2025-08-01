@@ -3,4 +3,4 @@ export const GLOBAL_CONFIG = {
     fullTitle: "Trackzy",
     shortTitle: "Trackzy",
   },
-}
+};

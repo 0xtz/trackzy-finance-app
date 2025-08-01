@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { Menu } from "lucide-react"
-import Link from "next/link"
-import Logo from "@/components/common/logo"
-import { Button } from "@/components/ui/button"
+import { Menu } from "lucide-react";
+import Link from "next/link";
+import Logo from "@/components/common/logo";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,23 +11,23 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { BgGradient } from "../common/icons"
-import NavAuthButtons from "./nav-auth-buttons"
+} from "@/components/ui/sheet";
+import { BgGradient } from "../common/icons";
+import NavAuthButtons from "./nav-auth-buttons";
 
 interface MenuItem {
-  title: string
-  url: string
-  description?: string
-  icon?: React.ReactNode
-  items?: MenuItem[]
+  title: string;
+  url: string;
+  description?: string;
+  icon?: React.ReactNode;
+  items?: MenuItem[];
 }
 
 const menu = [
@@ -54,7 +54,7 @@ const menu = [
     title: "Pricing",
     url: "#pricing",
   },
-]
+];
 
 export default function MainNavbar() {
   return (
@@ -99,7 +99,7 @@ export default function MainNavbar() {
                 <Button
                   aria-label="Menu"
                   onClick={() => {
-                    console.log("clicked")
+                    console.log("clicked");
                   }}
                   size="icon"
                   variant="outline"
@@ -135,7 +135,7 @@ export default function MainNavbar() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function renderMenuItem(item: MenuItem) {
@@ -151,7 +151,7 @@ function renderMenuItem(item: MenuItem) {
           ))}
         </NavigationMenuContent>
       </NavigationMenuItem>
-    )
+    );
   }
 
   return (
@@ -163,7 +163,7 @@ function renderMenuItem(item: MenuItem) {
         <Link href={item.url}>{item.title}</Link>
       </NavigationMenuLink>
     </NavigationMenuItem>
-  )
+  );
 }
 
 function SubMenuLink({ item }: Readonly<{ item: MenuItem }>) {
@@ -182,5 +182,5 @@ function SubMenuLink({ item }: Readonly<{ item: MenuItem }>) {
         )}
       </div>
     </Link>
-  )
+  );
 }

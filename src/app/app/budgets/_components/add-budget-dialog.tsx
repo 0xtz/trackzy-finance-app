@@ -93,18 +93,21 @@ export default function UpsertBudgetDialog({
         error: "Failed to create budget",
       },
     };
-    toast.promise(async () => {
-      const { success } = await upsertBudget({
-        ...values,
-        id: budget?.id ?? undefined,
-      });
+    toast.promise(
+      async () => {
+        const { success } = await upsertBudget({
+          ...values,
+          id: budget?.id ?? undefined,
+        });
 
-      if (success) {
-        form.reset();
+        if (success) {
+          form.reset();
 
-        setOpen(false);
-      }
-    }, messages[budget ? "upsert" : "create"]);
+          setOpen(false);
+        }
+      },
+      messages[budget ? "upsert" : "create"]
+    );
   }
 
   return (

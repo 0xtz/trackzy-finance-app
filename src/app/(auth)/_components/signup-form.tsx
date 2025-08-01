@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,16 +12,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { authClient } from "@/lib/auth/client"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth/client";
 
 const baseSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(8),
   confirmPassword: z.string().min(8),
-})
+});
 
 const formSchema = baseSchema.refine(
   (data) => data.password === data.confirmPassword,
@@ -29,9 +29,9 @@ const formSchema = baseSchema.refine(
     message: "Passwords do not match",
     path: ["confirmPassword"],
   }
-)
+);
 
-type FormSchema = z.infer<typeof formSchema>
+type FormSchema = z.infer<typeof formSchema>;
 
 // signup -> create an account
 export function SignupForm() {
@@ -44,11 +44,11 @@ export function SignupForm() {
       password: "",
       confirmPassword: "",
     },
-  })
+  });
 
   // 2. Define a submit handler.
   function onSubmit(values: FormSchema) {
-    console.log(values)
+    console.log(values);
 
     toast.promise(
       async () => {
@@ -57,22 +57,22 @@ export function SignupForm() {
           email: values.email,
           password: values.password,
           callbackURL: "/app",
-        })
+        });
 
-        console.log("🚀 ~ onSubmit ~ error:", error)
+        console.log("🚀 ~ onSubmit ~ error:", error);
 
         if (error) {
-          throw error
+          throw error;
         }
 
-        return data
+        return data;
       },
       {
         loading: "Creating account...",
         success: "Account created successfully",
         error: "Failed to create account",
       }
-    )
+    );
   }
 
   return (
@@ -160,5 +160,5 @@ export function SignupForm() {
         </Button>
       </form>
     </Form>
-  )
+  );
 }

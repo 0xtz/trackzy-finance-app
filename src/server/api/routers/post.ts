@@ -1,8 +1,8 @@
-import { and, desc, eq, sql } from "drizzle-orm"
-import { z } from "zod"
-import { paginationInputSchema } from "@/lib/utils"
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
-import { budget, category, expense, income } from "@/server/db/schema"
+import { and, desc, eq, sql } from "drizzle-orm";
+import { z } from "zod";
+import { paginationInputSchema } from "@/lib/utils";
+import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { budget, category, expense, income } from "@/server/db/schema";
 
 const createExpenseSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -12,7 +12,7 @@ const createExpenseSchema = z.object({
   icon: z.string().optional(),
   category_id: z.string().optional(),
   budget_id: z.string().optional(),
-})
+});
 
 const createIncomeSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -21,14 +21,14 @@ const createIncomeSchema = z.object({
   date: z.date(),
   icon: z.string().optional(),
   category_id: z.string().optional(),
-})
+});
 
 const createCategorySchema = z.object({
   name: z.string().min(1, "Name is required"),
   icon: z.string().optional(),
   color: z.string().optional(),
   type: z.enum(["expense", "income"]),
-})
+});
 
 // Expense Router
 export const expenseRouter = createTRPCRouter({
@@ -41,23 +41,23 @@ export const expenseRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { page, pageSize, userId, budgetId, categoryId } = input
-      const offset = (page - 1) * pageSize
+      const { page, pageSize, userId, budgetId, categoryId } = input;
+      const offset = (page - 1) * pageSize;
 
-      const whereConditions = [eq(expense.user_id, userId)]
+      const whereConditions = [eq(expense.user_id, userId)];
       if (budgetId) {
-        whereConditions.push(eq(expense.budget_id, budgetId))
+        whereConditions.push(eq(expense.budget_id, budgetId));
       }
       if (categoryId) {
-        whereConditions.push(eq(expense.category_id, categoryId))
+        whereConditions.push(eq(expense.category_id, categoryId));
       }
 
       // Get total count
       const countResult = await ctx.db
         .select({ count: sql<number>`count(*)` })
         .from(expense)
-        .where(and(...whereConditions))
-      const count = countResult[0]?.count ?? 0
+        .where(and(...whereConditions));
+      const count = countResult[0]?.count ?? 0;
 
       // Get paginated results with category and budget info
       const items = await ctx.db
@@ -87,14 +87,14 @@ export const expenseRouter = createTRPCRouter({
         .where(and(...whereConditions))
         .orderBy(desc(expense.date))
         .limit(pageSize)
-        .offset(offset)
+        .offset(offset);
 
       return {
         items,
         totalPages: Math.ceil(Number(count) / pageSize),
         currentPage: page,
         totalItems: Number(count),
-      }
+      };
     }),
 
   create: publicProcedure
@@ -104,7 +104,7 @@ export const expenseRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { userId, ...data } = input
+      const { userId, ...data } = input;
 
       const [newExpense] = await ctx.db
         .insert(expense)
@@ -114,9 +114,9 @@ export const expenseRouter = createTRPCRouter({
           created_at: new Date(),
           updated_at: new Date(),
         })
-        .returning()
+        .returning();
 
-      return newExpense
+      return newExpense;
     }),
 
   delete: publicProcedure
@@ -129,9 +129,11 @@ export const expenseRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       await ctx.db
         .delete(expense)
-        .where(and(eq(expense.id, input.id), eq(expense.user_id, input.userId)))
+        .where(
+          and(eq(expense.id, input.id), eq(expense.user_id, input.userId))
+        );
     }),
-})
+});
 
 // Income Router
 export const incomeRouter = createTRPCRouter({
@@ -143,20 +145,20 @@ export const incomeRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { page, pageSize, userId, categoryId } = input
-      const offset = (page - 1) * pageSize
+      const { page, pageSize, userId, categoryId } = input;
+      const offset = (page - 1) * pageSize;
 
-      const whereConditions = [eq(income.user_id, userId)]
+      const whereConditions = [eq(income.user_id, userId)];
       if (categoryId) {
-        whereConditions.push(eq(income.category_id, categoryId))
+        whereConditions.push(eq(income.category_id, categoryId));
       }
 
       // Get total count
       const countResult = await ctx.db
         .select({ count: sql<number>`count(*)` })
         .from(income)
-        .where(and(...whereConditions))
-      const count = countResult[0]?.count ?? 0
+        .where(and(...whereConditions));
+      const count = countResult[0]?.count ?? 0;
 
       // Get paginated results with category info
       const items = await ctx.db
@@ -181,14 +183,14 @@ export const incomeRouter = createTRPCRouter({
         .where(and(...whereConditions))
         .orderBy(desc(income.date))
         .limit(pageSize)
-        .offset(offset)
+        .offset(offset);
 
       return {
         items,
         totalPages: Math.ceil(Number(count) / pageSize),
         currentPage: page,
         totalItems: Number(count),
-      }
+      };
     }),
 
   create: publicProcedure
@@ -198,7 +200,7 @@ export const incomeRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { userId, ...data } = input
+      const { userId, ...data } = input;
 
       const [newIncome] = await ctx.db
         .insert(income)
@@ -208,9 +210,9 @@ export const incomeRouter = createTRPCRouter({
           created_at: new Date(),
           updated_at: new Date(),
         })
-        .returning()
+        .returning();
 
-      return newIncome
+      return newIncome;
     }),
 
   delete: publicProcedure
@@ -223,9 +225,9 @@ export const incomeRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       await ctx.db
         .delete(income)
-        .where(and(eq(income.id, input.id), eq(income.user_id, input.userId)))
+        .where(and(eq(income.id, input.id), eq(income.user_id, input.userId)));
     }),
-})
+});
 
 // Category Router
 export const categoryRouter = createTRPCRouter({
@@ -237,20 +239,20 @@ export const categoryRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { page, pageSize, userId, type } = input
-      const offset = (page - 1) * pageSize
+      const { page, pageSize, userId, type } = input;
+      const offset = (page - 1) * pageSize;
 
-      const whereConditions = [eq(category.user_id, userId)]
+      const whereConditions = [eq(category.user_id, userId)];
       if (type) {
-        whereConditions.push(eq(category.type, type))
+        whereConditions.push(eq(category.type, type));
       }
 
       // Get total count
       const countResult = await ctx.db
         .select({ count: sql<number>`count(*)` })
         .from(category)
-        .where(and(...whereConditions))
-      const count = countResult[0]?.count ?? 0
+        .where(and(...whereConditions));
+      const count = countResult[0]?.count ?? 0;
 
       // Get paginated results
       const items = await ctx.db
@@ -259,14 +261,14 @@ export const categoryRouter = createTRPCRouter({
         .where(and(...whereConditions))
         .orderBy(desc(category.created_at))
         .limit(pageSize)
-        .offset(offset)
+        .offset(offset);
 
       return {
         items,
         totalPages: Math.ceil(Number(count) / pageSize),
         currentPage: page,
         totalItems: Number(count),
-      }
+      };
     }),
 
   create: publicProcedure
@@ -276,7 +278,7 @@ export const categoryRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { userId, ...data } = input
+      const { userId, ...data } = input;
 
       const [newCategory] = await ctx.db
         .insert(category)
@@ -286,9 +288,9 @@ export const categoryRouter = createTRPCRouter({
           created_at: new Date(),
           updated_at: new Date(),
         })
-        .returning()
+        .returning();
 
-      return newCategory
+      return newCategory;
     }),
 
   delete: publicProcedure
@@ -303,6 +305,6 @@ export const categoryRouter = createTRPCRouter({
         .delete(category)
         .where(
           and(eq(category.id, input.id), eq(category.user_id, input.userId))
-        )
+        );
     }),
-})
+});

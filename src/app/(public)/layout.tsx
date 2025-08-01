@@ -1,6 +1,6 @@
 // import dynamic from "next/dynamic";
 
-import MainNavbar from "@/components/layout/nav-bar"
+import MainNavbar from "@/components/layout/nav-bar";
 
 // const MainFooter = dynamic(() => import('@/components/layout/footer'));
 
@@ -18,5 +18,5 @@ export default function PublicLayout({
       {/* Footer */}
       {/* <MainFooter /> */}
     </div>
-  )
+  );
 }

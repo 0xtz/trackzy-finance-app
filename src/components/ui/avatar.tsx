@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as AvatarPrimitive from "@radix-ui/react-avatar"
-import type * as React from "react"
+import * as AvatarPrimitive from "@radix-ui/react-avatar";
+import type * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Avatar({
   className,
@@ -18,7 +18,7 @@ function Avatar({
       data-slot="avatar"
       {...props}
     />
-  )
+  );
 }
 
 function AvatarImage({
@@ -31,7 +31,7 @@ function AvatarImage({
       data-slot="avatar-image"
       {...props}
     />
-  )
+  );
 }
 
 function AvatarFallback({
@@ -47,7 +47,7 @@ function AvatarFallback({
       data-slot="avatar-fallback"
       {...props}
     />
-  )
+  );
 }
 
 function AvatarsGroup({
@@ -63,7 +63,7 @@ function AvatarsGroup({
     >
       {children}
     </div>
-  )
+  );
 }
 
-export { Avatar, AvatarFallback, AvatarImage, AvatarsGroup }
+export { Avatar, AvatarFallback, AvatarImage, AvatarsGroup };

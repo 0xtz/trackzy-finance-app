@@ -1,13 +1,13 @@
-import { ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { BgGradient } from "@/components/common/icons"
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { BgGradient } from "@/components/common/icons";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
   AvatarsGroup,
-} from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   const AVATARS = [
@@ -23,7 +23,7 @@ export default function Hero() {
       src: "https://github.com/shadcn.png",
       alt: "Avatar 3",
     },
-  ]
+  ];
 
   return (
     <main className="container relative flex min-h-[90vh] flex-col items-center gap-6 text-balance bg-background p-6 text-center text-primary">
@@ -75,5 +75,5 @@ export default function Hero() {
         </div>
       </div>
     </main>
-  )
+  );
 }
