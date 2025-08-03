@@ -1,4 +1,4 @@
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { z } from "zod";
 import { paginationInputSchema } from "@/lib/utils";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
@@ -86,8 +86,15 @@ export const budgetRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const result = await ctx.db
-        .delete(budget)
-        .where(and(eq(budget.id, input.id), eq(budget.user_id, ctx.user.id)));
+        .update(budget)
+        .set({ deleted_at: new Date() })
+        .where(
+          and(
+            eq(budget.id, input.id),
+            eq(budget.user_id, ctx.user.id),
+            isNull(budget.deleted_at)
+          )
+        );
 
       return {
         success: result.length > 0,

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -53,17 +53,6 @@ export default function UpsertBudgetDialog({
       amount: budget?.amount ?? "",
     },
   });
-
-  // Reset form when budget changes or dialog opens
-  useEffect(() => {
-    if (open) {
-      form.reset({
-        name: budget?.name ?? "",
-        description: budget?.description ?? "",
-        amount: budget?.amount ?? "",
-      });
-    }
-  }, [budget, open, form]);
 
   const utils = api.useUtils();
   const { mutateAsync: upsertBudget, isPending } =

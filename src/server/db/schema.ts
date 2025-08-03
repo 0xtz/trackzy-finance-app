@@ -115,6 +115,7 @@ export const category = createTable(
     // timestamps
     created_at: timestamp({ mode: "date" }).notNull(),
     updated_at: timestamp({ mode: "date" }).notNull(),
+    deleted_at: timestamp({ mode: "date" }),
   },
   (table) => [
     foreignKey({
@@ -139,6 +140,7 @@ export const budget = createTable(
     // timestamps
     created_at: timestamp({ mode: "date" }).notNull(),
     updated_at: timestamp({ mode: "date" }).notNull(),
+    deleted_at: timestamp({ mode: "date" }),
   },
   (table) => [
     foreignKey({
@@ -166,6 +168,7 @@ export const income = createTable(
     // timestamps
     created_at: timestamp({ mode: "date" }).notNull(),
     updated_at: timestamp({ mode: "date" }).notNull(),
+    deleted_at: timestamp({ mode: "date" }),
   },
   (table) => [
     foreignKey({
@@ -199,6 +202,7 @@ export const expense = createTable(
     // timestamps
     created_at: timestamp({ mode: "date" }).notNull(),
     updated_at: timestamp({ mode: "date" }).notNull(),
+    deleted_at: timestamp({ mode: "date" }),
   },
   (table) => [
     foreignKey({
