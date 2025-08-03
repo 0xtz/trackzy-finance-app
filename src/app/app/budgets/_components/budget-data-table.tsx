@@ -124,6 +124,16 @@ function BudgetActions({
         await utils.budget.getAll.invalidate();
       },
     });
+  const { mutateAsync: duplicateBudget, isPending: isDuplicating } =
+    api.budget.duplicate.useMutation({
+      onSuccess: async ({ success }) => {
+        if (!success) {
+          return;
+        }
+
+        await utils.budget.getAll.invalidate();
+      },
+    });
 
   return (
     <>
@@ -145,7 +155,16 @@ function BudgetActions({
               Edit Budget
             </DropdownMenuItem>
 
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isDuplicating}
+              onClick={() => {
+                toast.promise(duplicateBudget({ id: budget.id }), {
+                  loading: "Duplicating budget...",
+                  success: "Budget duplicated successfully!",
+                  error: "Failed to duplicate budget",
+                });
+              }}
+            >
               <DollarSign className="size-4" />
               Duplicate Budget
             </DropdownMenuItem>
@@ -153,7 +172,6 @@ function BudgetActions({
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
-              className="hover:!text-destructive text-destructive"
               disabled={isDeleting}
               onClick={() => {
                 toast.promise(deleteBudget({ id: budget.id }), {
@@ -162,8 +180,9 @@ function BudgetActions({
                   error: "Failed to delete budget",
                 });
               }}
+              variant="destructive"
             >
-              <Trash className="size-4 text-destructive" />
+              <Trash className="size-4" />
               Delete Budget
             </DropdownMenuItem>
           </DropdownMenuContent>
