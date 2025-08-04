@@ -18,7 +18,7 @@ const config = {
 
   //
   experimental: {
-    //
+    reactCompiler: true,
   },
 };
 
