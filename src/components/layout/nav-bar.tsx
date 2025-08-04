@@ -125,9 +125,7 @@ export default function MainNavbar() {
                     ))}
                   </div>
 
-                  <div className="flex flex-col gap-3">
-                    <NavAuthButtons />
-                  </div>
+                  <NavAuthButtons />
                 </div>
               </SheetContent>
             </Sheet>

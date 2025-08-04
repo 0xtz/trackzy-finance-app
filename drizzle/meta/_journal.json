@@ -36,6 +36,13 @@
       "when": 1753736028479,
       "tag": "0004_glossy_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1754189633654,
+      "tag": "0005_vengeful_masque",
+      "breakpoints": true
     }
   ]
 }

@@ -45,7 +45,7 @@ export type PaginationInput = z.infer<typeof paginationInputSchema>;
 // ----------------------------
 
 export function formatCurrency(
-  amount: number,
+  amount: number | string,
   showSymbol = false,
   options?: Intl.NumberFormatOptions
 ) {
@@ -54,7 +54,7 @@ export function formatCurrency(
     currency: "MAD",
     ...(showSymbol ? { currencyDisplay: "symbol" } : {}),
     ...options,
-  }).format(amount);
+  }).format(Number(amount));
 }
 
 export function formatDate(date: Date | string | null | undefined): string {

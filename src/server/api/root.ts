@@ -1,10 +1,8 @@
-import {
-  categoryRouter,
-  expenseRouter,
-  incomeRouter,
-} from "@/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 import { budgetRouter } from "./routers/budget";
+import { categoryRouter } from "./routers/category";
+import { expenseRouter } from "./routers/expense";
+import { incomeRouter } from "./routers/income";
 
 /**
  * This is the primary router for your server.

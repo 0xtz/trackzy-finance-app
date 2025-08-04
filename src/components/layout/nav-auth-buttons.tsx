@@ -42,8 +42,13 @@ export default function NavAuthButtons() {
 
   // logged in
   return (
-    <div className="flex items-center gap-2">
-      <Button asChild size="sm" variant="secondary">
+    <div className="flex w-full flex-col gap-2 md:flex-row md:items-center">
+      <Button
+        asChild
+        className="w-full transition-all duration-700 md:w-auto"
+        size="sm"
+        variant="secondary"
+      >
         <Link href="/app">
           <DoorOpen className="size-4" />
           Dashboard
@@ -51,7 +56,7 @@ export default function NavAuthButtons() {
       </Button>
 
       <Button
-        className="group transition-all duration-700"
+        className="group w-full transition-all duration-700 md:w-auto"
         onClick={() => {
           toast.promise(authClient.signOut(), {
             loading: "Signing out...",
@@ -63,7 +68,7 @@ export default function NavAuthButtons() {
         variant="outline"
       >
         <LogOut className="size-4" />
-        <span className="hidden group-hover:block">Sign out</span>
+        <span className="group-hover:block md:hidden">Sign out</span>
       </Button>
     </div>
   );
