@@ -20,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,7 +27,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { GLOBAL_CONFIG } from "@/lib/global-config";
 import { formatCurrency } from "@/lib/utils";
@@ -151,6 +149,7 @@ function WishlistCard({
                   <Edit className="size-4" />
                   Edit Item
                 </DropdownMenuItem>
+
                 <DropdownMenuItem
                   disabled={isToggling}
                   onClick={() => onTogglePurchased(item.id, !item.purchased)}
@@ -160,11 +159,13 @@ function WishlistCard({
                     ? "Mark as not purchased"
                     : "Mark as purchased"}
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
+
                 <DropdownMenuItem
-                  className="text-destructive"
                   disabled={isDeleting}
                   onClick={() => onDelete(item.id, item.name)}
+                  variant="destructive"
                 >
                   <Trash className="size-4" />
                   Delete Item
@@ -174,7 +175,7 @@ function WishlistCard({
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="flex-1 space-y-4">
           <div className="aspect-video overflow-hidden rounded-md bg-muted">
             {/** biome-ignore lint/performance/noImgElement:dynamic input links */}
             <img
@@ -189,44 +190,25 @@ function WishlistCard({
           </p>
         </CardContent>
 
-        <CardFooter className="flex items-center justify-between pt-0">
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              aria-label={
-                item.purchased ? "Mark as not purchased" : "Mark as purchased"
-              }
-              checked={item.purchased}
-              disabled={isToggling}
-              id={item.id}
-              onCheckedChange={(checked) =>
-                onTogglePurchased(item.id, checked as boolean)
-              }
-            />
-            <Label className="cursor-pointer text-sm" htmlFor={item.id}>
-              {item.purchased ? "Purchased" : "Not purchased"}
-            </Label>
-          </div>
+        <CardFooter className="flex flex-wrap justify-end gap-2 pt-0">
+          {item.estimated_price && (
+            <Badge className="font-mono" variant="outline">
+              {formatCurrency(Number(item.estimated_price))}
+            </Badge>
+          )}
 
-          <div className="flex items-center space-x-2">
-            {item.estimated_price && (
-              <Badge className="font-mono" variant="outline">
-                {formatCurrency(Number(item.estimated_price))}
-              </Badge>
-            )}
-
-            {item.url && (
-              <Button asChild size="icon" variant="link">
-                <Link
-                  className="flex items-center justify-center space-x-2 text-sm"
-                  href={item.url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <ExternalLink className="size-4" />
-                </Link>
-              </Button>
-            )}
-          </div>
+          {item.url && (
+            <Button asChild size="icon" variant="link">
+              <Link
+                className="flex items-center justify-center space-x-2 text-sm"
+                href={item.url}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <ExternalLink className="size-4" />
+              </Link>
+            </Button>
+          )}
         </CardFooter>
       </Card>
 
