@@ -1,4 +1,5 @@
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { endOfMonth, startOfMonth } from "date-fns";
+import { and, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 import { paginationInputSchema } from "@/lib/utils";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
@@ -19,10 +20,27 @@ const createExpenseSchema = z.object({
 // Expense Router
 export const expenseRouter = createTRPCRouter({
   getAll: privateProcedure
-    .input(paginationInputSchema.extend({}))
+    .input(
+      paginationInputSchema.extend({
+        from_date: z.date().optional(),
+        to_date: z.date().optional(),
+      })
+    )
     .query(async ({ ctx, input }) => {
-      const { page, pageSize } = input;
+      const { page, pageSize, from_date, to_date } = input;
       const offset = (page - 1) * pageSize;
+
+      // if no date range provided => use current month
+      const now = new Date();
+      const defaultFromDate = from_date || startOfMonth(now);
+      const defaultToDate = to_date || endOfMonth(now);
+
+      const whereConditions = [
+        eq(expense.user_id, ctx.user.id),
+        isNull(expense.deleted_at),
+        gte(expense.date, defaultFromDate),
+        lte(expense.date, defaultToDate),
+      ];
 
       const results = await ctx.db
         .select({
@@ -51,9 +69,7 @@ export const expenseRouter = createTRPCRouter({
         .from(expense)
         .leftJoin(category, eq(expense.category_id, category.id))
         .leftJoin(budget, eq(expense.budget_id, budget.id))
-        .where(
-          and(eq(expense.user_id, ctx.user.id), isNull(expense.deleted_at))
-        )
+        .where(and(...whereConditions))
         .orderBy(desc(expense.date))
         .limit(pageSize)
         .offset(offset);
