@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const expenseFormSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
   amount: z

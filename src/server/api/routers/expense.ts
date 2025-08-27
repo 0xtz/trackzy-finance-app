@@ -2,20 +2,9 @@ import { endOfMonth, startOfMonth } from "date-fns";
 import { and, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 import { paginationInputSchema } from "@/lib/utils";
+import { expenseFormSchema } from "@/lib/z-schemas/expense";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import { budget, category, expense } from "@/server/db/schema";
-
-// Shared schemas
-const createExpenseSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().min(1, "Name is required"),
-  description: z.string().optional(),
-  amount: z.string().min(1, "Amount is required"), // numeric string for Drizzle
-  date: z.date(),
-  icon: z.string().optional(),
-  category_id: z.string().optional(),
-  budget_id: z.string().optional(),
-});
 
 // Expense Router
 export const expenseRouter = createTRPCRouter({
@@ -86,7 +75,7 @@ export const expenseRouter = createTRPCRouter({
     }),
 
   upsert: privateProcedure
-    .input(createExpenseSchema)
+    .input(expenseFormSchema)
     .mutation(async ({ ctx, input }) => {
       // Clean input data
       const cleanInput = {
