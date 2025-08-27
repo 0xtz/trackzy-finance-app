@@ -1,5 +1,7 @@
 import { CreditCard } from "lucide-react";
 import { connection } from "next/server";
+import { Suspense } from "react";
+import DataTableSkeleton from "@/components/common/data-table-skeleton";
 import { Button } from "@/components/ui/button";
 import { api, HydrateClient } from "@/trpc/server";
 import UpsertBudgetDialog from "./_components/add-budget-dialog";
@@ -25,7 +27,9 @@ export default async function BudgetsPage() {
         </UpsertBudgetDialog>
       </div>
 
-      <BudgetDataTable />
+      <Suspense fallback={<DataTableSkeleton columnCount={5} rowCount={5} />}>
+        <BudgetDataTable />
+      </Suspense>
     </HydrateClient>
   );
 }

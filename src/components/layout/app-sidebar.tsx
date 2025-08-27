@@ -3,6 +3,7 @@
 import {
   ChevronRight,
   CreditCard,
+  Heart,
   type LucideIcon,
   PieChart,
   Settings,
@@ -61,6 +62,11 @@ const data = {
       title: "Income",
       url: "/income",
       icon: PieChart,
+    },
+    {
+      title: "Wishlist",
+      url: "/wishlist",
+      icon: Heart,
     },
   ],
   settings: [

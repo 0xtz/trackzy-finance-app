@@ -57,7 +57,10 @@ export function formatCurrency(
   }).format(Number(amount));
 }
 
-export function formatDate(date: Date | string | null | undefined): string {
+export function formatDate(
+  date: Date | string | null | undefined,
+  formatString = "MMM d, yyyy"
+): string {
   if (!date) {
     return "";
   }
@@ -81,5 +84,5 @@ export function formatDate(date: Date | string | null | undefined): string {
   }
 
   // Default format: "MMM d, yyyy"
-  return format(dateObj, "MMM d, yyyy");
+  return format(dateObj, formatString);
 }
