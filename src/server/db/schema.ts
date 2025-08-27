@@ -222,3 +222,31 @@ export const expense = createTable(
     }),
   ]
 );
+
+export const wishlist = createTable(
+  "wishlist",
+  {
+    id: text().primaryKey().notNull().default(sql`gen_random_uuid()::text`),
+    name: text().notNull(),
+    description: text(),
+    estimated_price: numeric(), // optional
+    url: text(), // optional link to product
+    image: text(), // optional image link
+    purchased: boolean().notNull().default(false),
+
+    // foreign keys
+    user_id: text().notNull(),
+
+    // timestamps
+    created_at: timestamp({ mode: "date" }).notNull(),
+    updated_at: timestamp({ mode: "date" }).notNull(),
+    deleted_at: timestamp({ mode: "date" }),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.user_id],
+      foreignColumns: [user.id],
+      name: "wishlist_user_id_fkey",
+    }),
+  ]
+);

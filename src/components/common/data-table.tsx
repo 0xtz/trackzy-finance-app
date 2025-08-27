@@ -19,11 +19,13 @@ export default function DataTable<TData>({
   data,
   columns,
   children,
+  emptyState,
   ...props
 }: {
   data: TData[];
   columns: ColumnDef<TData>[];
   children?: React.ReactNode;
+  emptyState?: React.ReactNode;
   props?: React.HTMLAttributes<HTMLDivElement>;
 }) {
   const table = useReactTable({
@@ -72,7 +74,7 @@ export default function DataTable<TData>({
           ) : (
             <TableRow>
               <TableCell className="h-24 text-center" colSpan={columns.length}>
-                No results.
+                {emptyState ?? "No results."}
               </TableCell>
             </TableRow>
           )}
