@@ -7,9 +7,9 @@ import AppProviders from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "Trackzy — Smarter Money Management",
+  title: "Trackzy - Smarter Money Management",
   description:
-    "Track your spending, build healthy financial habits, and reach your goals — all in one place with Trackzy.",
+    "Track your spending, build healthy financial habits, and reach your goals - all in one place with Trackzy.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

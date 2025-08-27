@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -82,21 +83,18 @@ export default function UpsertBudgetDialog({
         error: "Failed to create budget",
       },
     };
-    toast.promise(
-      async () => {
-        const { success } = await upsertBudget({
-          ...values,
-          id: budget?.id ?? undefined,
-        });
+    toast.promise(async () => {
+      const { success } = await upsertBudget({
+        ...values,
+        id: budget?.id ?? undefined,
+      });
 
-        if (success) {
-          form.reset();
+      if (success) {
+        form.reset();
 
-          setOpen(false);
-        }
-      },
-      messages[budget ? "upsert" : "create"]
-    );
+        setOpen(false);
+      }
+    }, messages[budget ? "upsert" : "create"]);
   }
 
   return (
@@ -122,7 +120,11 @@ export default function UpsertBudgetDialog({
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. Monthly groceries" {...field} />
+                    <Input
+                      disabled={isPending}
+                      placeholder="e.g. Monthly groceries"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -136,7 +138,11 @@ export default function UpsertBudgetDialog({
                 <FormItem>
                   <FormLabel>Description (optional)</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Budget description..." {...field} />
+                    <Textarea
+                      disabled={isPending}
+                      placeholder="Budget description..."
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -151,6 +157,7 @@ export default function UpsertBudgetDialog({
                   <FormLabel>Amount</FormLabel>
                   <FormControl>
                     <Input
+                      disabled={isPending}
                       placeholder="0.00"
                       step="0.01"
                       type="number"
@@ -164,6 +171,7 @@ export default function UpsertBudgetDialog({
 
             <div className="flex justify-end gap-2 pt-4">
               <Button
+                disabled={isPending}
                 onClick={() => setOpen(false)}
                 type="button"
                 variant="outline"
@@ -172,6 +180,7 @@ export default function UpsertBudgetDialog({
               </Button>
 
               <Button disabled={isPending} type="submit">
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {(() => {
                   if (isPending) {
                     return budget ? "Updating..." : "Creating...";

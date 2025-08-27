@@ -1,9 +1,14 @@
 import { Receipt } from "lucide-react";
+import dynamic from "next/dynamic";
 import { connection } from "next/server";
+import DateRangePicker from "@/components/common/date-range-picker";
 import { Button } from "@/components/ui/button";
 import { api, HydrateClient } from "@/trpc/server";
 import UpsertExpenseDialog from "./_components/add-expense-dialog";
-import ExpenseDataTable from "./_components/expense-data-table";
+
+const ExpenseDataTable = dynamic(
+  () => import("./_components/expense-data-table")
+);
 
 export default async function ExpensesPage() {
   await connection();
@@ -18,11 +23,16 @@ export default async function ExpensesPage() {
       {/* header */}
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-2xl">My Expenses</h2>
-        <UpsertExpenseDialog>
-          <Button size="sm">
-            <Receipt className="size-4" /> New Expense
-          </Button>
-        </UpsertExpenseDialog>
+
+        <div className="flex items-center space-x-2">
+          <DateRangePicker />
+
+          <UpsertExpenseDialog>
+            <Button size="sm">
+              <Receipt className="size-4" /> New Expense
+            </Button>
+          </UpsertExpenseDialog>
+        </div>
       </div>
 
       <ExpenseDataTable />

@@ -5,6 +5,7 @@ import {
   Calendar,
   DollarSign,
   EllipsisVertical,
+  Loader2,
   Pencil,
   Trash,
   X,
@@ -101,9 +102,17 @@ export default function BudgetDataTable() {
     },
   ];
 
-  // TODO : empty state
-
-  return <DataTable columns={columns} data={data.items} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={data.items}
+      emptyState={
+        <p className="mt-2 text-muted-foreground text-sm">
+          Get started by creating your first budget to track your spending.
+        </p>
+      }
+    />
+  );
 }
 
 function BudgetActions({
@@ -165,7 +174,11 @@ function BudgetActions({
                 });
               }}
             >
-              <DollarSign className="size-4" />
+              {isDuplicating ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <DollarSign className="size-4" />
+              )}
               Duplicate Budget
             </DropdownMenuItem>
 
@@ -182,7 +195,11 @@ function BudgetActions({
               }}
               variant="destructive"
             >
-              <Trash className="size-4" />
+              {isDeleting ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Trash className="size-4" />
+              )}
               Delete Budget
             </DropdownMenuItem>
           </DropdownMenuContent>
