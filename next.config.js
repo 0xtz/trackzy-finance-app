@@ -13,6 +13,10 @@ const config = {
         protocol: "https",
         hostname: "github.com",
       },
+      {
+        protocol: "https",
+        hostname: "ui.shadcn.com",
+      },
     ],
   },
 
