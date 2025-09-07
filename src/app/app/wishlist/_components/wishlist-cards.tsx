@@ -39,6 +39,34 @@ export default function WishlistCards() {
     pageSize: 100,
   });
 
+  if (data.items.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-center">
+        <Heart className="mb-4 size-12 text-muted-foreground" />
+        <h3 className="mb-2 font-medium text-lg">No wishlist items yet</h3>
+        <p className="text-muted-foreground">
+          Start adding items to your wishlist to track your desired purchases.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {data.items.map((item) => (
+        <WishlistCard item={item} key={item.id} />
+      ))}
+    </div>
+  );
+}
+
+function WishlistCard({
+  item,
+}: {
+  item: RouterOutputs["wishlist"]["getAll"]["items"][number];
+}) {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
   const utils = api.useUtils();
 
   const { mutateAsync: togglePurchased, isPending: isToggling } =
@@ -58,70 +86,28 @@ export default function WishlistCards() {
       },
     });
 
-  const handleTogglePurchased = async (id: string, purchased: boolean) => {
-    try {
-      await togglePurchased({ id, purchased });
-      toast.success(
-        purchased
-          ? "Item marked as purchased!"
-          : "Item marked as not purchased!"
-      );
-    } catch {
-      toast.error("Failed to update item status");
-    }
-  };
+  function handleAction(acionType: "TOGGLE_PURCHASED" | "DELETE") {
+    const actions = {
+      DELETE: {
+        func: deleteItem({ id: item.id }),
+        messages: {
+          loading: "Deleting item...",
+          success: "Item deleted successfully!",
+          error: "Failed to delete item",
+        },
+      },
+      TOGGLE_PURCHASED: {
+        func: togglePurchased({ id: item.id, purchased: !item.purchased }),
+        messages: {
+          loading: "Toggling purchased status...",
+          success: "Purchased status toggled successfully!",
+          error: "Failed to toggle purchased status",
+        },
+      },
+    }[acionType];
 
-  const handleDelete = async (id: string, name: string) => {
-    try {
-      await deleteItem({ id });
-      toast.success(`"${name}" has been deleted from your wishlist`);
-    } catch {
-      toast.error("Failed to delete item");
-    }
-  };
-
-  if (data.items.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 text-center">
-        <Heart className="mb-4 size-12 text-muted-foreground" />
-        <h3 className="mb-2 font-medium text-lg">No wishlist items yet</h3>
-        <p className="text-muted-foreground">
-          Start adding items to your wishlist to track your desired purchases.
-        </p>
-      </div>
-    );
+    toast.promise(actions.func, actions.messages);
   }
-
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {data.items.map((item) => (
-        <WishlistCard
-          isDeleting={isDeleting}
-          isToggling={isToggling}
-          item={item}
-          key={item.id}
-          onDelete={handleDelete}
-          onTogglePurchased={handleTogglePurchased}
-        />
-      ))}
-    </div>
-  );
-}
-
-function WishlistCard({
-  item,
-  onTogglePurchased,
-  onDelete,
-  isToggling,
-  isDeleting,
-}: {
-  item: RouterOutputs["wishlist"]["getAll"]["items"][number];
-  onTogglePurchased: (id: string, purchased: boolean) => Promise<void>;
-  onDelete: (id: string, name: string) => Promise<void>;
-  isToggling: boolean;
-  isDeleting: boolean;
-}) {
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   return (
     <>
@@ -152,7 +138,9 @@ function WishlistCard({
 
                 <DropdownMenuItem
                   disabled={isToggling}
-                  onClick={() => onTogglePurchased(item.id, !item.purchased)}
+                  onClick={() => {
+                    handleAction("TOGGLE_PURCHASED");
+                  }}
                 >
                   <Check className="size-4" />
                   {item.purchased
@@ -164,7 +152,7 @@ function WishlistCard({
 
                 <DropdownMenuItem
                   disabled={isDeleting}
-                  onClick={() => onDelete(item.id, item.name)}
+                  onClick={() => handleAction("DELETE")}
                   variant="destructive"
                 >
                   <Trash className="size-4" />
