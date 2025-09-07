@@ -50,7 +50,7 @@
 - [x] delete a wishlist item.
 - [x] edit a wishlist item.
 
-- [] **priority levels** (low / medium / high).
+- [x] **priority levels** (low / medium / high).
 - [] **progress saving** (mark partial savings towards an item).
 
 ### Extras (Small but Nice)

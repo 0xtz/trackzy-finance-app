@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getWishlistPriority } from "@/lib/enums";
 import { GLOBAL_CONFIG } from "@/lib/global-config";
 import { formatCurrency } from "@/lib/utils";
 import { api, type RouterOutputs } from "@/trpc/react";
@@ -71,7 +72,11 @@ function WishlistCard({
 
   const { mutateAsync: togglePurchased, isPending: isToggling } =
     api.wishlist.togglePurchased.useMutation({
-      onSuccess: async () => {
+      onSuccess: async ({ success }) => {
+        if (!success) {
+          return;
+        }
+
         await utils.wishlist.getAll.invalidate();
       },
     });
@@ -82,6 +87,7 @@ function WishlistCard({
         if (!success) {
           return;
         }
+
         await utils.wishlist.getAll.invalidate();
       },
     });
@@ -179,7 +185,10 @@ function WishlistCard({
 
         <CardFooter className="flex flex-wrap justify-end gap-2 pt-0">
           {item.estimated_price && (
-            <Badge className="font-mono" variant="outline">
+            <Badge
+              className={`font-mono ${getWishlistPriority(item.priority).color}`}
+              variant="outline"
+            >
               {formatCurrency(Number(item.estimated_price))}
             </Badge>
           )}

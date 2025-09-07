@@ -1,5 +1,6 @@
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { z } from "zod";
+import { WISHLIST_PRIORITY } from "@/lib/enums";
 import { paginationInputSchema } from "@/lib/utils";
 import { wishlistFormSchema } from "@/lib/z-schemas/wishlist";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
@@ -32,6 +33,7 @@ export const wishlistRouter = createTRPCRouter({
           url: wishlist.url,
           image: wishlist.image,
           purchased: wishlist.purchased,
+          priority: wishlist.priority,
           created_at: wishlist.created_at,
           updated_at: wishlist.updated_at,
           totalCount: sql<number>`count(*) over()`,
@@ -66,6 +68,7 @@ export const wishlistRouter = createTRPCRouter({
         image: input.image === "" ? null : input.image,
         description: input.description === "" ? null : input.description,
         purchased: input.purchased ?? false,
+        priority: input.priority ?? WISHLIST_PRIORITY.LOW.label,
       };
 
       // Update existing wishlist item
@@ -104,7 +107,7 @@ export const wishlistRouter = createTRPCRouter({
   delete: privateProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const result = await ctx.db
+      await ctx.db
         .update(wishlist)
         .set({ deleted_at: new Date() })
         .where(
@@ -116,7 +119,8 @@ export const wishlistRouter = createTRPCRouter({
         );
 
       return {
-        success: result.length > 0,
+        success: true,
+        error: null,
       };
     }),
 

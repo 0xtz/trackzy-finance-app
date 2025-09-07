@@ -50,6 +50,13 @@
       "when": 1756332072894,
       "tag": "0006_legal_kinsey_walden",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1757288164378,
+      "tag": "0007_next_mandrill",
+      "breakpoints": true
     }
   ]
 }

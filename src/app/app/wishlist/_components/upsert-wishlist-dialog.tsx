@@ -22,7 +22,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { WISHLIST_PRIORITY } from "@/lib/enums";
 import {
   type WishlistFormSchema,
   wishlistFormSchema,
@@ -51,6 +59,7 @@ export default function UpsertWishlistDialog({
       name: item?.name ?? "",
       description: item?.description ?? "",
       estimated_price: item?.estimated_price ?? "",
+      priority: item?.priority ?? WISHLIST_PRIORITY.LOW.label,
       url: item?.url ?? "",
       image: item?.image ?? "",
       purchased: item?.purchased ?? false,
@@ -62,34 +71,30 @@ export default function UpsertWishlistDialog({
     api.wishlist.upsert.useMutation({
       onSuccess: async (data) => {
         if (!data.success) {
-          toast.error("Failed to save wishlist item");
           return;
         }
 
         await utils.wishlist.getAll.invalidate();
-        toast.success(
-          item
-            ? "Wishlist item updated successfully!"
-            : "Wishlist item created successfully!"
-        );
 
         form.reset();
         setOpen(false);
       },
-      onError: (error) => {
-        toast.error(`Failed to save item: ${error.message}`);
-      },
     });
 
-  const onSubmit = async (data: WishlistFormSchema) => {
-    try {
-      await upsertItem({
+  const onSubmit = (data: WishlistFormSchema) => {
+    toast.promise(
+      upsertItem({
         ...data,
         id: item?.id,
-      });
-    } catch {
-      // Error handling is done in the mutation
-    }
+      }),
+      {
+        loading: "Saving wishlist item...",
+        success: item
+          ? "Wishlist item updated successfully!"
+          : "Wishlist item created successfully!",
+        error: "Failed to save wishlist item",
+      }
+    );
   };
 
   return (
@@ -149,6 +154,43 @@ export default function UpsertWishlistDialog({
                       type="number"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="priority"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Priority</FormLabel>
+
+                  <FormControl>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select priority" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        {Object.values(WISHLIST_PRIORITY).map((priority) => (
+                          <SelectItem
+                            className="flex items-center gap-2"
+                            key={priority.label}
+                            value={priority.label}
+                          >
+                            <div
+                              className={`${priority.color} size-1 rounded-full`}
+                            />
+                            {priority.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -233,6 +233,7 @@ export const wishlist = createTable(
     url: text(), // optional link to product
     image: text(), // optional image link
     purchased: boolean().notNull().default(false),
+    priority: text().notNull().default("LOW"), // WISHLIST_PRIORITY
 
     // foreign keys
     user_id: text().notNull(),
