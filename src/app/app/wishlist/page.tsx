@@ -30,11 +30,9 @@ export default async function WishlistPage() {
       </div>
 
       {/* content */}
-      <div className="mt-6">
-        <Suspense fallback={<WishlistCardsSkeleton />}>
-          <WishlistCards />
-        </Suspense>
-      </div>
+      <Suspense fallback={<WishlistCardsSkeleton />}>
+        <WishlistCards />
+      </Suspense>
     </HydrateClient>
   );
 }

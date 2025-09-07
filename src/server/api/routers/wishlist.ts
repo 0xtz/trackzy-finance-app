@@ -20,12 +20,8 @@ export const wishlistRouter = createTRPCRouter({
       const whereConditions = [
         eq(wishlist.user_id, ctx.user.id),
         isNull(wishlist.deleted_at),
+        purchased !== undefined ? eq(wishlist.purchased, purchased) : undefined,
       ];
-
-      // Add purchased filter if provided
-      if (purchased !== undefined) {
-        whereConditions.push(eq(wishlist.purchased, purchased));
-      }
 
       const results = await ctx.db
         .select({
@@ -47,6 +43,7 @@ export const wishlistRouter = createTRPCRouter({
         .offset(offset);
 
       const items = results.map(({ totalCount, ...item }) => item);
+
       const totalItems = Number(results[0]?.totalCount ?? 0);
 
       return {

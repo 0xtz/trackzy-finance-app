@@ -89,7 +89,7 @@ function WishlistCard({
   function handleAction(acionType: "TOGGLE_PURCHASED" | "DELETE") {
     const actions = {
       DELETE: {
-        func: deleteItem({ id: item.id }),
+        func: () => deleteItem({ id: item.id }),
         messages: {
           loading: "Deleting item...",
           success: "Item deleted successfully!",
@@ -97,7 +97,8 @@ function WishlistCard({
         },
       },
       TOGGLE_PURCHASED: {
-        func: togglePurchased({ id: item.id, purchased: !item.purchased }),
+        func: () =>
+          togglePurchased({ id: item.id, purchased: !item.purchased }),
         messages: {
           loading: "Toggling purchased status...",
           success: "Purchased status toggled successfully!",
@@ -106,7 +107,7 @@ function WishlistCard({
       },
     }[acionType];
 
-    toast.promise(actions.func, actions.messages);
+    toast.promise(actions.func(), actions.messages);
   }
 
   return (
@@ -138,9 +139,7 @@ function WishlistCard({
 
                 <DropdownMenuItem
                   disabled={isToggling}
-                  onClick={() => {
-                    handleAction("TOGGLE_PURCHASED");
-                  }}
+                  onClick={() => handleAction("TOGGLE_PURCHASED")}
                 >
                   <Check className="size-4" />
                   {item.purchased

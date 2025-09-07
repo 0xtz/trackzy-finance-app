@@ -112,18 +112,21 @@ export default function UpsertExpenseDialog({
         error: "Failed to create expense",
       },
     };
-    toast.promise(async () => {
-      const { success } = await upsertExpense({
-        ...values,
-        id: expense?.id ?? undefined,
-      });
+    toast.promise(
+      async () => {
+        const { success } = await upsertExpense({
+          ...values,
+          id: expense?.id ?? undefined,
+        });
 
-      if (success) {
-        form.reset();
+        if (success) {
+          form.reset();
 
-        setOpen(false);
-      }
-    }, messages[expense ? "upsert" : "create"]);
+          setOpen(false);
+        }
+      },
+      messages[expense ? "upsert" : "create"]
+    );
   }
 
   return (
