@@ -10,6 +10,7 @@ export const wishlistFormSchema = z.object({
   url: z.string().optional(),
   image: z.string().optional(),
   purchased: z.boolean().optional(),
+  priority: z.string().optional(),
 });
 
 export type WishlistFormSchema = z.infer<typeof wishlistFormSchema>;

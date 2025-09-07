@@ -1,5 +1,6 @@
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { z } from "zod";
+import { WISHLIST_PRIORITY } from "@/lib/enums";
 import { paginationInputSchema } from "@/lib/utils";
 import { wishlistFormSchema } from "@/lib/z-schemas/wishlist";
 import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
@@ -20,12 +21,8 @@ export const wishlistRouter = createTRPCRouter({
       const whereConditions = [
         eq(wishlist.user_id, ctx.user.id),
         isNull(wishlist.deleted_at),
+        purchased !== undefined ? eq(wishlist.purchased, purchased) : undefined,
       ];
-
-      // Add purchased filter if provided
-      if (purchased !== undefined) {
-        whereConditions.push(eq(wishlist.purchased, purchased));
-      }
 
       const results = await ctx.db
         .select({
@@ -36,6 +33,7 @@ export const wishlistRouter = createTRPCRouter({
           url: wishlist.url,
           image: wishlist.image,
           purchased: wishlist.purchased,
+          priority: wishlist.priority,
           created_at: wishlist.created_at,
           updated_at: wishlist.updated_at,
           totalCount: sql<number>`count(*) over()`,
@@ -47,6 +45,7 @@ export const wishlistRouter = createTRPCRouter({
         .offset(offset);
 
       const items = results.map(({ totalCount, ...item }) => item);
+
       const totalItems = Number(results[0]?.totalCount ?? 0);
 
       return {
@@ -69,6 +68,7 @@ export const wishlistRouter = createTRPCRouter({
         image: input.image === "" ? null : input.image,
         description: input.description === "" ? null : input.description,
         purchased: input.purchased ?? false,
+        priority: input.priority ?? WISHLIST_PRIORITY.LOW.label,
       };
 
       // Update existing wishlist item
@@ -107,7 +107,7 @@ export const wishlistRouter = createTRPCRouter({
   delete: privateProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const result = await ctx.db
+      await ctx.db
         .update(wishlist)
         .set({ deleted_at: new Date() })
         .where(
@@ -119,7 +119,8 @@ export const wishlistRouter = createTRPCRouter({
         );
 
       return {
-        success: result.length > 0,
+        success: true,
+        error: null,
       };
     }),
 

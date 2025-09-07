@@ -1,0 +1,1 @@
+ALTER TABLE "trackzy_wishlist" ADD COLUMN "priority" text DEFAULT 'LOW' NOT NULL;

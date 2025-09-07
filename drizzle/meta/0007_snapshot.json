@@ -1,6 +1,6 @@
 {
-  "id": "6544bf6f-1c98-4fa1-83df-205644cbdc36",
-  "prevId": "4b8dfee0-af5b-4430-aecc-1743749546d2",
+  "id": "a54593e1-12da-4e92-8364-51cd3df79740",
+  "prevId": "6544bf6f-1c98-4fa1-83df-205644cbdc36",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -94,8 +94,12 @@
           "name": "account_user_id_fkey",
           "tableFrom": "trackzy_account",
           "tableTo": "trackzy_user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -166,8 +170,12 @@
           "name": "budget_user_id_fkey",
           "tableFrom": "trackzy_budget",
           "tableTo": "trackzy_user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -244,8 +252,12 @@
           "name": "category_user_id_fkey",
           "tableFrom": "trackzy_category",
           "tableTo": "trackzy_user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -340,8 +352,12 @@
           "name": "expense_user_id_fkey",
           "tableFrom": "trackzy_expense",
           "tableTo": "trackzy_user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -349,8 +365,12 @@
           "name": "expense_category_id_fkey",
           "tableFrom": "trackzy_expense",
           "tableTo": "trackzy_category",
-          "columnsFrom": ["category_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -358,8 +378,12 @@
           "name": "expense_budget_id_fkey",
           "tableFrom": "trackzy_expense",
           "tableTo": "trackzy_budget",
-          "columnsFrom": ["budget_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "budget_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -448,8 +472,12 @@
           "name": "income_user_id_fkey",
           "tableFrom": "trackzy_income",
           "tableTo": "trackzy_user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -457,8 +485,12 @@
           "name": "income_category_id_fkey",
           "tableFrom": "trackzy_income",
           "tableTo": "trackzy_category",
-          "columnsFrom": ["category_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -528,8 +560,12 @@
           "name": "session_user_id_fkey",
           "tableFrom": "trackzy_session",
           "tableTo": "trackzy_user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -539,7 +575,9 @@
         "session_token_key": {
           "name": "session_token_key",
           "nullsNotDistinct": false,
-          "columns": ["token"]
+          "columns": [
+            "token"
+          ]
         }
       },
       "policies": {},
@@ -601,7 +639,9 @@
         "user_email_key": {
           "name": "user_email_key",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},
@@ -705,6 +745,13 @@
           "notNull": true,
           "default": false
         },
+        "priority": {
+          "name": "priority",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'LOW'"
+        },
         "user_id": {
           "name": "user_id",
           "type": "text",
@@ -736,8 +783,12 @@
           "name": "wishlist_user_id_fkey",
           "tableFrom": "trackzy_wishlist",
           "tableTo": "trackzy_user",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
