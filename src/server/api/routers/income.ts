@@ -1,45 +1,37 @@
-import { and, desc, eq, sql } from "drizzle-orm";
+import { endOfMonth, startOfMonth } from "date-fns";
+import { and, desc, eq, gte, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 import { paginationInputSchema } from "@/lib/utils";
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { incomeFormSchema } from "@/lib/z-schemas/income";
+import { createTRPCRouter, privateProcedure } from "@/server/api/trpc";
 import { category, income } from "@/server/db/schema";
-
-const createIncomeSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  description: z.string().optional(),
-  amount: z.string().min(1, "Amount is required"),
-  date: z.date(),
-  icon: z.string().optional(),
-  category_id: z.string().optional(),
-});
 
 // Income Router
 export const incomeRouter = createTRPCRouter({
-  getAll: publicProcedure
+  getAll: privateProcedure
     .input(
       paginationInputSchema.extend({
-        userId: z.string(),
-        categoryId: z.string().optional(),
+        from_date: z.date().optional(),
+        to_date: z.date().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
-      const { page, pageSize, userId, categoryId } = input;
+      const { page, pageSize, from_date, to_date } = input;
       const offset = (page - 1) * pageSize;
 
-      const whereConditions = [eq(income.user_id, userId)];
-      if (categoryId) {
-        whereConditions.push(eq(income.category_id, categoryId));
-      }
+      // if no date range provided => use current month
+      const now = new Date();
+      const defaultFromDate = from_date || startOfMonth(now);
+      const defaultToDate = to_date || endOfMonth(now);
 
-      // Get total count
-      const countResult = await ctx.db
-        .select({ count: sql<number>`count(*)` })
-        .from(income)
-        .where(and(...whereConditions));
-      const count = countResult[0]?.count ?? 0;
+      const whereConditions = [
+        eq(income.user_id, ctx.user.id),
+        isNull(income.deleted_at),
+        gte(income.date, defaultFromDate),
+        lte(income.date, defaultToDate),
+      ];
 
-      // Get paginated results with category info
-      const items = await ctx.db
+      const results = await ctx.db
         .select({
           id: income.id,
           name: income.name,
@@ -47,6 +39,7 @@ export const incomeRouter = createTRPCRouter({
           amount: income.amount,
           date: income.date,
           icon: income.icon,
+          category_id: income.category_id,
           created_at: income.created_at,
           updated_at: income.updated_at,
           category: {
@@ -55,6 +48,7 @@ export const incomeRouter = createTRPCRouter({
             icon: category.icon,
             color: category.color,
           },
+          totalCount: sql<number>`count(*) over()`,
         })
         .from(income)
         .leftJoin(category, eq(income.category_id, category.id))
@@ -63,46 +57,118 @@ export const incomeRouter = createTRPCRouter({
         .limit(pageSize)
         .offset(offset);
 
+      const items = results.map(({ totalCount, ...item }) => item);
+      const totalItems = Number(results[0]?.totalCount ?? 0);
+
       return {
         items,
-        totalPages: Math.ceil(Number(count) / pageSize),
+        totalPages: Math.ceil(totalItems / pageSize),
         currentPage: page,
-        totalItems: Number(count),
+        totalItems,
       };
     }),
 
-  create: publicProcedure
-    .input(
-      createIncomeSchema.extend({
-        userId: z.string(),
-      })
-    )
+  upsert: privateProcedure
+    .input(incomeFormSchema)
     .mutation(async ({ ctx, input }) => {
-      const { userId, ...data } = input;
+      // Clean input data
+      const cleanInput = {
+        ...input,
+        category_id: input.category_id === "" ? null : input.category_id,
+        icon: input.icon === "" ? null : input.icon,
+        description: input.description === "" ? null : input.description,
+      };
 
+      // Update existing income
+      if (input.id) {
+        const [existingIncome] = await ctx.db
+          .update(income)
+          .set(cleanInput)
+          .where(and(eq(income.id, input.id), eq(income.user_id, ctx.user.id)))
+          .returning();
+
+        return {
+          success: true,
+          income: existingIncome,
+        };
+      }
+
+      // Create new income
       const [newIncome] = await ctx.db
         .insert(income)
         .values({
-          ...data,
-          user_id: userId,
+          ...cleanInput,
+          user_id: ctx.user.id,
           created_at: new Date(),
           updated_at: new Date(),
         })
         .returning();
 
-      return newIncome;
+      return {
+        success: true,
+        income: newIncome,
+      };
     }),
 
-  delete: publicProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        userId: z.string(),
-      })
-    )
+  delete: privateProcedure
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       await ctx.db
-        .delete(income)
-        .where(and(eq(income.id, input.id), eq(income.user_id, input.userId)));
+        .update(income)
+        .set({ deleted_at: new Date() })
+        .where(
+          and(
+            eq(income.id, input.id),
+            eq(income.user_id, ctx.user.id),
+            isNull(income.deleted_at)
+          )
+        );
+
+      return {
+        success: true,
+        error: null,
+      };
+    }),
+
+  duplicate: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const [existingIncome] = await ctx.db
+        .select()
+        .from(income)
+        .where(
+          and(
+            eq(income.id, input.id),
+            eq(income.user_id, ctx.user.id),
+            isNull(income.deleted_at)
+          )
+        );
+
+      if (!existingIncome) {
+        console.error("🚀 ~ existingIncome:", existingIncome);
+        return { success: false };
+      }
+
+      const [newIncome] = await ctx.db
+        .insert(income)
+        .values({
+          user_id: ctx.user.id,
+          name: `${existingIncome.name} (Copy)`,
+          description: existingIncome.description
+            ? `${existingIncome.description} (Copy)`
+            : undefined,
+          amount: existingIncome.amount,
+          date: existingIncome.date,
+          icon: existingIncome.icon,
+          category_id: existingIncome.category_id,
+          created_at: new Date(),
+          updated_at: new Date(),
+        })
+        .returning();
+
+      return {
+        success: true,
+        income: newIncome,
+      };
     }),
 });

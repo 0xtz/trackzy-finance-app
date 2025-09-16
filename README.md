@@ -33,11 +33,11 @@
 
 ### My Income
 
-- [] create a new income record:
-  - [] name, description, amount, date
-- [] edit income.
-- [] delete income.
-- [] duplicate income.
+- [x] create a new income record:
+  - [x] name, description, amount, date
+- [x] edit income.
+- [x] delete income.
+- [x] duplicate income.
 
 - [] **recurring income** (salary, freelancing).
 - [] **attach notes or payslip (optional file)**.
